@@ -20,28 +20,27 @@ func NewMongoProvider() *MongoProvider {
 	return mp
 }
 
-
 func GetSession() *mgo.Session {
-    var ls = session.Clone()
-    return ls
+	var ls = session.Clone()
+	return ls
 }
 
 func Contact(ls *mgo.Session) *mgo.Collection {
 	contact := ls.DB("test").C("contact")
-    return contact
+	return contact
 }
 
 func (im *MongoProvider) All() []Information {
-    var c = []Information{}
-    s := GetSession()
-    defer s.Close()
-    Contact(s).Find(nil).All(&c)
-    return c
+	var c = []Information{}
+	s := GetSession()
+	defer s.Close()
+	Contact(s).Find(nil).All(&c)
+	return c
 }
 
 func (im *MongoProvider) Add(c *Information) {
-    s := GetSession()
-    defer s.Close()
+	s := GetSession()
+	defer s.Close()
 	err := Contact(s).Insert(c)
 	if err != nil {
 		log.Fatal(err)
@@ -49,32 +48,32 @@ func (im *MongoProvider) Add(c *Information) {
 }
 
 func (im *MongoProvider) Update(c *Information) {
-    target := bson.M{"id": c.Id}
-    change := bson.M{"$set": bson.M{"id":c.Id, "email": c.Email, "title": c.Title, "content": c.Content}}
-    s := GetSession()
-    defer s.Close()
-    err := Contact(s).Update(target, change)
-    if err != nil {
-        panic(err)
-    }
+	target := bson.M{"id": c.Id}
+	change := bson.M{"$set": bson.M{"id": c.Id, "email": c.Email, "title": c.Title, "content": c.Content}}
+	s := GetSession()
+	defer s.Close()
+	err := Contact(s).Update(target, change)
+	if err != nil {
+		panic(err)
+	}
 }
 
 func (im *MongoProvider) Remove(id string) error {
-    target := bson.M{"id": id}
-    s := GetSession()
-    defer s.Close()
-    err := Contact(s).Remove(target)
-    if err != nil {
-        panic(err)
-        return errors.New("emit macho dwarf: elf header corrupted")
-    }
+	target := bson.M{"id": id}
+	s := GetSession()
+	defer s.Close()
+	err := Contact(s).Remove(target)
+	if err != nil {
+		panic(err)
+		return errors.New("emit macho dwarf: elf header corrupted")
+	}
 	return nil
 }
 
 func (im *MongoProvider) Get(id string) (*Information, error) {
 	result := Information{}
-    s := GetSession()
-    defer s.Close()
+	s := GetSession()
+	defer s.Close()
 	err := Contact(s).Find(bson.M{"id": id}).One(&result)
 	if err != nil {
 		log.Fatal(err)

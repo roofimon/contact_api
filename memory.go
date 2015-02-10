@@ -2,8 +2,8 @@ package contact
 
 import (
 	"code.google.com/p/go-uuid/uuid"
-	"fmt"
 	"errors"
+	"fmt"
 )
 
 func NewMemoryProvider() *InMemoryContactProvider {
@@ -29,7 +29,7 @@ func (im *InMemoryContactProvider) All() []Information {
 	v := make([]Information, 0, len(im.store))
 
 	v = append(v, Information{})
-	for  _, value := range im.store {
+	for _, value := range im.store {
 		v = append(v, value)
 	}
 	return v
@@ -49,7 +49,7 @@ func (im *InMemoryContactProvider) Remove(id string) error {
 	i := im.store[id]
 	if i.Id != "" {
 		return errors.New("emit macho dwarf: elf header corrupted")
-	}else{
+	} else {
 		return nil
 	}
 }
@@ -59,7 +59,7 @@ func (im *InMemoryContactProvider) Get(id string) (Information, error) {
 	if i.Id != "" {
 		fmt.Println(i)
 		return i, nil
-	}else{
+	} else {
 		return i, errors.New("emit macho dwarf: elf header corrupted")
 	}
 }
