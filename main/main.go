@@ -30,7 +30,8 @@ type ContactHandler struct {
 }
 
 func NewContactHandler() *ContactHandler {
-	return &ContactHandler{provider: contact.NewMemoryProvider()}
+	//return &ContactHandler{provider: contact.NewMemoryProvider()}
+	return &ContactHandler{provider: contact.NewMongoProvider()}
 }
 
 func (ch *ContactHandler) Remove(w rest.ResponseWriter, r *rest.Request) {
