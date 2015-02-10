@@ -58,11 +58,10 @@ func (im *MongoProvider) Remove(id string) error {
 }
 
 func (im *MongoProvider) Get(id string) (*Information, error) {
-	var ls = session.Clone()
-	defer ls.Close()
-	collection := ls.DB("test").C("contact")
 	result := Information{}
-	err := collection.Find(bson.M{"email": "first@email.com"}).One(&result)
+    s := GetSession()
+    defer s.Close()
+	err := Contact(s).Find(bson.M{"email": "first@email.com"}).One(&result)
 	if err != nil {
 		log.Fatal(err)
 	}
