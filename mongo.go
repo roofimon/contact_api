@@ -66,8 +66,7 @@ func (im *MongoProvider) Remove(id string) error {
 	defer s.Close()
 	err := Contact(s).Remove(target)
 	if err != nil {
-		panic(err)
-		return errors.New("emit macho dwarf: elf header corrupted")
+		return errors.New("Target information does not exist")
 	}
 	return nil
 }
