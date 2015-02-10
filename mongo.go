@@ -1,10 +1,12 @@
 package contact
 
 import (
+    "code.google.com/p/go-uuid/uuid"
 	"errors"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 	"log"
+    "fmt"
 )
 
 var session *mgo.Session
@@ -41,6 +43,7 @@ func (im *MongoProvider) All() []Information {
 func (im *MongoProvider) Add(c *Information) {
 	s := GetSession()
 	defer s.Close()
+    c.Id = uuid.New()
 	err := Contact(s).Insert(c)
 	if err != nil {
 		log.Fatal(err)
@@ -50,6 +53,7 @@ func (im *MongoProvider) Add(c *Information) {
 func (im *MongoProvider) Update(c *Information) {
 	target := bson.M{"id": c.Id}
 	change := bson.M{"$set": bson.M{"id": c.Id, "email": c.Email, "title": c.Title, "content": c.Content}}
+    fmt.Println(c)
 	s := GetSession()
 	defer s.Close()
 	err := Contact(s).Update(target, change)

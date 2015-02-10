@@ -3,6 +3,7 @@ package contact
 import (
 	"github.com/ant0ine/go-json-rest/rest"
 	"net/http"
+    "fmt"
 )
 
 type ContactHandler struct {
@@ -49,6 +50,7 @@ func (ch *ContactHandler) Add(w rest.ResponseWriter, r *rest.Request) {
 func (ch *ContactHandler) Update(w rest.ResponseWriter, r *rest.Request) {
 	var information Information
 	r.DecodeJsonPayload(&information)
+    fmt.Println(information)
 	ch.provider.Update(&information)
 	w.WriteJson("Update entry successfully")
 }
