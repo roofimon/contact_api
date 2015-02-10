@@ -40,28 +40,42 @@ func (im *MongoProvider) All() []Information {
 }
 
 func (im *MongoProvider) Add(c *Information) {
-	var ls = session.Clone()
-	defer ls.Close()
-	collection := ls.DB("test").C("contact")
-	err := collection.Insert(c)
+    s := GetSession()
+    defer s.Close()
+	err := Contact(s).Insert(c)
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
 func (im *MongoProvider) Update(c *Information) {
-
+    target := bson.M{"id": c.Id}
+    change := bson.M{"$set": bson.M{"id":c.Id, "email": c.Email, "title": c.Title, "content": c.Content}}
+    s := GetSession()
+    defer s.Close()
+    err := Contact(s).Update(target, change)
+    if err != nil {
+        panic(err)
+    }
 }
 
 func (im *MongoProvider) Remove(id string) error {
-	return errors.New("emit macho dwarf: elf header corrupted")
+    target := bson.M{"id": id}
+    s := GetSession()
+    defer s.Close()
+    err := Contact(s).Remove(target)
+    if err != nil {
+        panic(err)
+        return errors.New("emit macho dwarf: elf header corrupted")
+    }
+	return nil
 }
 
 func (im *MongoProvider) Get(id string) (*Information, error) {
 	result := Information{}
     s := GetSession()
     defer s.Close()
-	err := Contact(s).Find(bson.M{"email": "first@email.com"}).One(&result)
+	err := Contact(s).Find(bson.M{"id": id}).One(&result)
 	if err != nil {
 		log.Fatal(err)
 	}
